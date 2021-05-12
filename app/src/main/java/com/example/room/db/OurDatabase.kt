@@ -1,13 +1,13 @@
 package com.example.room.db
 
 import android.content.Context
-import androidx.room.DatabaseConfiguration
-import androidx.room.InvalidationTracker
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.example.room.db.dao.WordsDao
+import com.example.room.db.entities.WordEntity
+import com.example.room.model.Word
 
+@Database(entities = [WordEntity::class], version = 1, exportSchema = false)
 abstract class OurDatabase : RoomDatabase() {
 
     abstract fun wordDao(): WordsDao
@@ -22,11 +22,13 @@ abstract class OurDatabase : RoomDatabase() {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     OurDatabase::class.java,
                     "word_database"
                 ).build()
+
                 INSTANCE = instance
                 // return instance
                 instance
